@@ -20,8 +20,8 @@ class Tweet {
   // ArrayList<Word> words;
 
   void update(){
-    loc.x += (targLoc.x - loc.x) * .01;
-    loc.y += (targLoc.y - loc.y) * .5;
+    loc.x += (targLoc.x - loc.x) * .1;
+    loc.y += (targLoc.y - loc.y) * .1;
     loc.z += (targLoc.z - loc.z) * .1;
 
 /*
@@ -38,7 +38,11 @@ class Tweet {
       translate(loc.x, loc.y, loc.z);
       fill(clr);
       noStroke();
+      rect(0,0,sz*pow(1+PHI, 7),sz);
       ellipse(0,0,sz, sz);
+      fill(255,255,255,10);
+      textSize(12);
+      text(tweet_text, 0, 0);
       popMatrix();
 
     }
