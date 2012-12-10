@@ -1,4 +1,6 @@
-import processing.opengl.*;
+//import processing.opengl.*;
+
+// add in moviemaker
 
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
@@ -14,8 +16,9 @@ Calendar oldestTweetM, newestTweetM;
 
 void setup() {
   background(255);
+  size(1900, 1060, P3D);
   // size(1900, 1060, OPENGL);
-  size(1200, 700, OPENGL);
+  // size(1200, 700, OPENGL);
   // size(1200, 700, P3D);
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
@@ -38,11 +41,15 @@ void setup() {
     float secondsInADay = 1.0*24*60*60*1000;
   for (Tweet ctw : tweets){
     // float crat = ctw.created_at.getTimeInMillis();
-    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width));
+    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width)-500);
     float secOffset = ctw.created_at.getTimeInMillis() % secondsInADay;
     ctw.targLoc.y = map( secOffset, 0.0, secondsInADay, 0.0, float(height));
     // ctw.targLoc.y =  random(height);
     ctw.targLoc.z = 0;
+
+    //ctw.loc.x = ctw.targLoc.x;
+    //ctw.loc.y = ctw.targLoc.y;
+    //ctw.loc.z = ctw.targLoc.z;
 
     // println(secOffset/1000/60/60 + " : " + ctw.targLoc + " : " + ctw.created_at.getTime());
   }
