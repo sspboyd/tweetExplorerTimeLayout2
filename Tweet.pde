@@ -10,17 +10,19 @@ class Tweet {
   int tweet_id;
   String tweet_text;
   Calendar created_at;
+  long timeInMillis;
   int user_id;
   String screen_name;
   String name;
   String profile_image_url;
 
-  ArrayList<Word> words;
+  // ArrayList<Word> words;
 
   void update(){
-    loc.x += (targLoc.x - loc.x) * .1;
-    loc.y += (targLoc.y - loc.y) * .1;
+    loc.x += (targLoc.x - loc.x) * .05;
+    loc.y += (targLoc.y - loc.y) * .05;
     loc.z += (targLoc.z - loc.z) * .1;
+
     if(dist(mouseX, mouseY, loc.x,loc.y) < 50){
       //sz = 10;
       targLoc.z = 50;
