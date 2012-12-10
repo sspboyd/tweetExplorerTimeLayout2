@@ -20,8 +20,8 @@ class Tweet {
   // ArrayList<Word> words;
 
   void update(){
-    loc.x += (targLoc.x - loc.x) * .01;
-    loc.y += (targLoc.y - loc.y) * .01;
+    loc.x += (targLoc.x - loc.x) * .1;
+    loc.y += (targLoc.y - loc.y) * .1;
     loc.z += (targLoc.z - loc.z) * .1;
 
     /*

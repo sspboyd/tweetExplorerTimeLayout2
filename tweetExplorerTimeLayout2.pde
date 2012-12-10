@@ -17,7 +17,7 @@ boolean recording = true;
 
 void setup() {
   background(255);
-  size(1900, 1060, P3D);
+  size(1920, 1080, P3D);
   // size(1900, 1060, OPENGL);
   // size(1200, 700, OPENGL);
   // size(1200, 700, P3D);
@@ -198,7 +198,7 @@ void screenCap() {
   String outputDir = "out/";
   String sketchName = "tweetExplorerTimeLayout-";
   String randomSeedNum = "rS" + rSn + "-";
-  String dateTime = "" + year() + month() + day() + hour() + second();
+  String dateTime = "" + year() + month() + day() + hour() + minute() + second();
   String fileType = ".tif";
   String fileName = outputDir + sketchName + randomSeedNum + dateTime + fileType;
   save(fileName);
@@ -207,13 +207,13 @@ void screenCap() {
 
 void screenCapMov() {
   // save functionality in here
-  String outputDir = "out/";
+  String outputDir = "out/movImgCaps/";
   String sketchName = "tweetExplorerTimeLayout-";
   String randomSeedNum = "rS" + rSn + "-";
-  String dateTime = "" + year() + month() + day() + hour() + second();
+  String dateTime = "" + year() + month() + day();
   String fileType = ".tif";
   String fileName = outputDir + sketchName + randomSeedNum + dateTime;
-  saveFrame(fileName+"#####"+fileType);
+  saveFrame(fileName+"-#####"+fileType);
   // println("Screen shot taken and saved to " + fileName);
 }
 
