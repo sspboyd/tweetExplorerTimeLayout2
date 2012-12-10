@@ -20,18 +20,18 @@ class Tweet {
   // ArrayList<Word> words;
 
   void update(){
-    loc.x += (targLoc.x - loc.x) * .1;
-    loc.y += (targLoc.y - loc.y) * .1;
+    loc.x += (targLoc.x - loc.x) * .01;
+    loc.y += (targLoc.y - loc.y) * .01;
     loc.z += (targLoc.z - loc.z) * .1;
 
-/*
+    /*
     if(dist(mouseX, mouseY, loc.x,loc.y) < 50){
       //sz = 10;
       targLoc.z = 50;
-      }else{
-        targLoc.z = 0;
-      }
-      */
+    }else{
+      targLoc.z = 0;
+    }
+    */
     }
     void render(){
       pushMatrix();

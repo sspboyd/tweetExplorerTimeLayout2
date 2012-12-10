@@ -13,6 +13,7 @@ String[] accts;
 
 Calendar oldestTweetM, newestTweetM;
 
+boolean recording = true;
 
 void setup() {
   background(255);
@@ -41,7 +42,7 @@ void setup() {
     float secondsInADay = 1.0*24*60*60*1000;
   for (Tweet ctw : tweets){
     // float crat = ctw.created_at.getTimeInMillis();
-    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width)-500);
+    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width)-250);
     float secOffset = ctw.created_at.getTimeInMillis() % secondsInADay;
     ctw.targLoc.y = map( secOffset, 0.0, secondsInADay, 0.0, float(height));
     // ctw.targLoc.y =  random(height);
@@ -60,6 +61,7 @@ void setup() {
 void draw() {
  background(0);
  renderChart();
+ if(recording) screenCapMov();
 }
 
 void loadTweets(String _fn) {
@@ -182,6 +184,13 @@ Calendar getCal(String ds){ // ds = dateString
 
 void keyPressed() {
   if (key == 'S') screenCap();
+  if(key == 'm'){
+    if(recording){
+      recording = false;
+    }else{
+      recording = true;
+    }
+  }
 }
 
 void screenCap() {
@@ -194,6 +203,18 @@ void screenCap() {
   String fileName = outputDir + sketchName + randomSeedNum + dateTime + fileType;
   save(fileName);
   println("Screen shot taken and saved to " + fileName);
+}
+
+void screenCapMov() {
+  // save functionality in here
+  String outputDir = "out/";
+  String sketchName = "tweetExplorerTimeLayout-";
+  String randomSeedNum = "rS" + rSn + "-";
+  String dateTime = "" + year() + month() + day() + hour() + second();
+  String fileType = ".tif";
+  String fileName = outputDir + sketchName + randomSeedNum + dateTime;
+  saveFrame(fileName+"#####"+fileType);
+  // println("Screen shot taken and saved to " + fileName);
 }
 
 
