@@ -27,9 +27,9 @@ void setup() {
   keywords = loadStrings("data/keywords.csv");
   accts =    loadStrings("data/accts.csv");
 
-   loadTweets("tweets.csv");
-  // loadTweets("tweetsSmall.csv");
-  // loadTweets("tweetsTiny.csv");
+    loadTweets("tweets.csv");
+  //loadTweets("tweetsSmall.csv");
+  //loadTweets("tweetsTiny.csv");
     newestTweetM = newestTweet(tweets);
   println("newest Time: " + newestTweetM.getTime());
   oldestTweetM = oldestTweet(tweets);
@@ -51,7 +51,7 @@ void setup() {
 }
 
 void draw() {
- background(255);
+ background(0);
  renderChart();
 }
 
@@ -66,7 +66,7 @@ void loadTweets(String _fn) {
     // tw.loc = new PVector(random(50,width-100), random(100, height-100), random(100, 1000));
     // tw.targLoc = new PVector(50+random(width-100), 50+random(height-100), 0);
     tw.sz = 15.0;
-    tw.clr = color(20, 30, 1,1);
+    tw.clr = color(255, 255, 255,1);
 
     // tweet_id tweet_text  created_at  user_id screen_name name  profile_image_url
     tw.tweet_id =           int(pieces[0]);
