@@ -103,8 +103,8 @@ void loadTweets(String _fn) {
 /* 
  This method grabs the earliest/oldest tweet publish date and then
  returns a Calendar object set to be the start of that day. 
- EG. if the earliest (oldest) pub date is Feb 11 at 17:08, the returned Calendar is
- Feb 11 00:00
+ EG. if the last (end) pub date is Feb 11 at 17:08, the returned Calendar is
+ Feb 11 23:59:59
  */
 Calendar endTweet(ArrayList<Tweet> tw){
   Calendar endCal = Calendar.getInstance();
@@ -121,6 +121,12 @@ Calendar endTweet(ArrayList<Tweet> tw){
 }
 
 
+/* 
+ This method grabs the first tweet publish date and then
+ returns a Calendar object set to be the start of that day. 
+ EG. if the first pub date is Feb 11 at 17:08, the returned Calendar is
+ Feb 11 00:00
+ */
 Calendar startTweet(ArrayList<Tweet> tw){
   Calendar startCal = Calendar.getInstance();
   startCal.setTimeInMillis(Long.MAX_VALUE); // looking for a past date so init to the future
@@ -223,5 +229,3 @@ void screenCapMov() {
   saveFrame(fileName+"-#####"+fileType);
   // println("Screen shot taken and saved to " + fileName);
 }
-
-
