@@ -1,25 +1,24 @@
-//import processing.opengl.*;
-
-// add in moviemaker
+import processing.opengl.*;
 
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
-float PHI = 0.618033989;
+final float PHI = 0.618033989;
 PFont font;
 
 ArrayList<Tweet> tweets = new ArrayList();
 String[] keywords;
 String[] accts;
 
-Calendar oldestTweetM, newestTweetM;
+Calendar oldestTweetM; // this is the beginning of the day for the oldest (first) tweet 
+Calendar newestTweetM; // this is the end of the day for the newest (last) tweet
 
 boolean recording = true;
 
 void setup() {
   background(255);
-  size(1920, 1080, P3D);
+  // size(1920, 1080, P3D);
   // size(1900, 1060, OPENGL);
-  // size(1200, 700, OPENGL);
+  size(1200, 700, OPENGL);
   // size(1200, 700, P3D);
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
@@ -31,26 +30,27 @@ void setup() {
   keywords = loadStrings("data/keywords.csv");
   accts =    loadStrings("data/accts.csv");
 
-    loadTweets("tweets.csv");
-  //loadTweets("tweetsSmall.csv");
+  // loadTweets("tweets.csv");
+   loadTweets("tweetsSmall.csv");
   //loadTweets("tweetsTiny.csv");
-    newestTweetM = newestTweet(tweets);
+
+  newestTweetM = endTweet(tweets);
   println("newest Time: " + newestTweetM.getTime());
-  oldestTweetM = oldestTweet(tweets);
+  oldestTweetM = startTweet(tweets);
   println("oldest Time: " + oldestTweetM.getTime());
 
-    float secondsInADay = 1.0*24*60*60*1000;
+    final float secondsInADay = 1.0*24*60*60*1000;
   for (Tweet ctw : tweets){
     // float crat = ctw.created_at.getTimeInMillis();
     ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width)-250);
     float secOffset = ctw.created_at.getTimeInMillis() % secondsInADay;
-    ctw.targLoc.y = map( secOffset, 0.0, secondsInADay, 0.0, float(height));
+    ctw.targLoc.y = map(secOffset, 0.0, secondsInADay, float(height),0);
     // ctw.targLoc.y =  random(height);
     ctw.targLoc.z = 0;
 
-    //ctw.loc.x = ctw.targLoc.x;
-    //ctw.loc.y = ctw.targLoc.y;
-    //ctw.loc.z = ctw.targLoc.z;
+    ctw.loc.x = ctw.targLoc.x;
+    ctw.loc.y = ctw.targLoc.y;
+    ctw.loc.z = ctw.targLoc.z;
 
     // println(secOffset/1000/60/60 + " : " + ctw.targLoc + " : " + ctw.created_at.getTime());
   }
@@ -89,42 +89,50 @@ void loadTweets(String _fn) {
     tw.loc = new PVector();
     tw.targLoc = new PVector();
 
-    tw.loc.x = random(width);
-    tw.loc.y = random(height);
-    tw.loc.z = 0;
-
-
+    // tw.loc.x = random(width);
+    // tw.loc.y = random(height);
+    // tw.loc.z = 0;
 
     tweets.add(tw);
     rowCount++;
   }
-
   println("rowCount: " + rowCount);
 }
 
 
-
-Calendar oldestTweet(ArrayList<Tweet> tw){
-  Calendar oldestCal = Calendar.getInstance();
-  oldestCal.setTimeInMillis(-Long.MAX_VALUE); // looking for a future date so init to the past
+/* 
+ This method grabs the earliest/oldest tweet publish date and then
+ returns a Calendar object set to be the start of that day. 
+ EG. if the earliest (oldest) pub date is Feb 11 at 17:08, the returned Calendar is
+ Feb 11 00:00
+ */
+Calendar endTweet(ArrayList<Tweet> tw){
+  Calendar endCal = Calendar.getInstance();
+  endCal.setTimeInMillis(-Long.MAX_VALUE); // looking for a future date so init to the past
   for(Tweet ctw : tw){
-     if(ctw.created_at.after(oldestCal)){
-       oldestCal = ctw.created_at;
+     if(ctw.created_at.after(endCal)){
+       endCal = ctw.created_at;
      }
   }
-  return oldestCal;
+  Calendar endOfDay = Calendar.getInstance();
+  endOfDay.set(endCal.get(Calendar.YEAR), endCal.get(Calendar.MONTH), endCal.get(Calendar.DAY_OF_MONTH), 23, 59,59);
+  endCal = endOfDay; 
+  return endCal;
 }
 
 
-Calendar newestTweet(ArrayList<Tweet> tw){
-  Calendar newestCal = Calendar.getInstance();
-  newestCal.setTimeInMillis(Long.MAX_VALUE); // looking for a past date so init to the future
+Calendar startTweet(ArrayList<Tweet> tw){
+  Calendar startCal = Calendar.getInstance();
+  startCal.setTimeInMillis(Long.MAX_VALUE); // looking for a past date so init to the future
   for(Tweet ctw : tw){
-     if(ctw.created_at.before(newestCal)){
-       newestCal = ctw.created_at;
+     if(ctw.created_at.before(startCal)){
+       startCal = ctw.created_at;
      }
   }
-  return newestCal;
+  Calendar startOfDay = Calendar.getInstance();
+  startOfDay.set(startCal.get(Calendar.YEAR), startCal.get(Calendar.MONTH), startCal.get(Calendar.DAY_OF_MONTH), 0,0,0);
+  startCal = startOfDay;
+  return startCal;
 }
 
 
@@ -141,7 +149,6 @@ void renderChart() {
 Calendar getCal(String ds){ // ds = dateString
   // 0123456789012345678
   // 2012-11-23 00:00:09
-  // println("ds = " + ds);
   int yr = int(ds.substring(0,4)); 
   int mon = int(ds.substring(5,7))-1;
   int dy = int(ds.substring(8,10));
