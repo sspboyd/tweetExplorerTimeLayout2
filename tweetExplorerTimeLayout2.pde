@@ -1,4 +1,4 @@
-// import processing.opengl.*;
+import processing.opengl.*;
 
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
@@ -20,8 +20,8 @@ float margin;
 void setup() {
   background(255);
   size(1920, 1080, P3D);
-  // size(1900, 1060, OPENGL);
-  // size(1200, 700, OPENGL);
+  // size(1300, 700, OPENGL);
+  //size(1200, 700, OPENGL);
   // size(1200, 700, P3D);
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
@@ -156,10 +156,12 @@ void renderChart() {
   tw.update();
   tw.render();
 }
+/*
 stroke(255,255,255,100);
 noFill();
 rectMode(CORNERS);
 rect(plotX1, plotY1, plotX2, plotY2);
+*/
   // draw axis
   // draw data
   // draw titles
