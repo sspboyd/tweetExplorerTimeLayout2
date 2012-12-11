@@ -41,11 +41,11 @@ class Tweet {
       fill(clr);
       noStroke();
       //rect(0,0,sz*pow(1+PHI, 7),sz);
-      // ellipse(0,0,sz, sz);
+      ellipse(0, 0, sz, sz);
       if(dist(mouseX, mouseY, loc.x, loc.y) < 2){
         fill(255,0,0,200);
       }else{
-      fill(255,255,255,5);
+      fill(clr);
     }
       textSize(12);
       text(tweet_text, 0, 0);

@@ -18,7 +18,7 @@ float plotX1, plotX2, plotY1, plotY2; // defines area for chart
 float margin;
 
 void setup() {
-  background(255);
+  background(0);
   size(1920, 1080, P3D);
   // size(1300, 700, OPENGL);
   //size(1200, 700, OPENGL);
@@ -67,7 +67,7 @@ void setup() {
 }
 
 void draw() {
- background(0);
+ background(255);
  renderChart();
 
  if(recording) screenCapMov();
@@ -83,8 +83,9 @@ void loadTweets(String _fn) {
     Tweet tw = new Tweet();
     // tw.loc = new PVector(random(50,width-100), random(100, height-100), random(100, 1000));
     // tw.targLoc = new PVector(50+random(width-100), 50+random(height-100), 0);
-    tw.sz = 15.0;
-    tw.clr = color(255, 255, 255,1);
+    tw.sz = width * pow(PHI, 10);
+    // tw.clr = color(255, 255, 255,1);
+    tw.clr = color(0, 0, 0,2);
 
     // tweet_id tweet_text  created_at  user_id screen_name name  profile_image_url
     tw.tweet_id =           int(pieces[0]);
