@@ -1,4 +1,4 @@
-import processing.opengl.*;
+// import processing.opengl.*;
 
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
@@ -14,37 +14,45 @@ Calendar newestTweetM; // this is the end of the day for the newest (last) tweet
 
 boolean recording = true;
 
+float plotX1, plotX2, plotY1, plotY2; // defines area for chart
+float margin;
+
 void setup() {
   background(255);
-  // size(1920, 1080, P3D);
+  size(1920, 1080, P3D);
   // size(1900, 1060, OPENGL);
-  size(1200, 700, OPENGL);
+  // size(1200, 700, OPENGL);
   // size(1200, 700, P3D);
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
   font = createFont("Helvetica", 24);  //requires a font file in the data folder
   textFont(font);
   // smooth(8);
-  noStroke();
+  // noStroke();
+  margin = width*pow(PHI, 8);
+  plotX1 = margin;
+  plotX2 = width-margin;
+  plotY1 = margin;
+  plotY2 = height-margin;
 
   keywords = loadStrings("data/keywords.csv");
   accts =    loadStrings("data/accts.csv");
 
-  // loadTweets("tweets.csv");
-   loadTweets("tweetsSmall.csv");
-  //loadTweets("tweetsTiny.csv");
+  loadTweets("tweets.csv");
+  // loadTweets("tweetsSmall.csv");
+  // loadTweets("tweetsTiny.csv");
 
   newestTweetM = endTweet(tweets);
   println("newest Time: " + newestTweetM.getTime());
   oldestTweetM = startTweet(tweets);
   println("oldest Time: " + oldestTweetM.getTime());
 
-    final float secondsInADay = 1.0*24*60*60*1000;
+  final float secondsInADay = 1.0*24*60*60*1000;
   for (Tweet ctw : tweets){
     // float crat = ctw.created_at.getTimeInMillis();
-    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), 0.0, float(width)-250);
+    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), plotX1, plotX2);
     float secOffset = ctw.created_at.getTimeInMillis() % secondsInADay;
-    ctw.targLoc.y = map(secOffset, 0.0, secondsInADay, float(height),0);
+    ctw.targLoc.y = map(secOffset, 0.0, secondsInADay, plotY2,plotY1);
     // ctw.targLoc.y =  random(height);
     ctw.targLoc.z = 0;
 
@@ -61,6 +69,7 @@ void setup() {
 void draw() {
  background(0);
  renderChart();
+
  if(recording) screenCapMov();
 }
 
@@ -106,18 +115,18 @@ void loadTweets(String _fn) {
  EG. if the last (end) pub date is Feb 11 at 17:08, the returned Calendar is
  Feb 11 23:59:59
  */
-Calendar endTweet(ArrayList<Tweet> tw){
+ Calendar endTweet(ArrayList<Tweet> tw){
   Calendar endCal = Calendar.getInstance();
   endCal.setTimeInMillis(-Long.MAX_VALUE); // looking for a future date so init to the past
   for(Tweet ctw : tw){
-     if(ctw.created_at.after(endCal)){
-       endCal = ctw.created_at;
-     }
-  }
-  Calendar endOfDay = Calendar.getInstance();
-  endOfDay.set(endCal.get(Calendar.YEAR), endCal.get(Calendar.MONTH), endCal.get(Calendar.DAY_OF_MONTH), 23, 59,59);
-  endCal = endOfDay; 
-  return endCal;
+   if(ctw.created_at.after(endCal)){
+     endCal = ctw.created_at;
+   }
+ }
+ Calendar endOfDay = Calendar.getInstance();
+ endOfDay.set(endCal.get(Calendar.YEAR), endCal.get(Calendar.MONTH), endCal.get(Calendar.DAY_OF_MONTH), 23, 59,59);
+ endCal = endOfDay; 
+ return endCal;
 }
 
 
@@ -127,18 +136,18 @@ Calendar endTweet(ArrayList<Tweet> tw){
  EG. if the first pub date is Feb 11 at 17:08, the returned Calendar is
  Feb 11 00:00
  */
-Calendar startTweet(ArrayList<Tweet> tw){
+ Calendar startTweet(ArrayList<Tweet> tw){
   Calendar startCal = Calendar.getInstance();
   startCal.setTimeInMillis(Long.MAX_VALUE); // looking for a past date so init to the future
   for(Tweet ctw : tw){
-     if(ctw.created_at.before(startCal)){
-       startCal = ctw.created_at;
-     }
-  }
-  Calendar startOfDay = Calendar.getInstance();
-  startOfDay.set(startCal.get(Calendar.YEAR), startCal.get(Calendar.MONTH), startCal.get(Calendar.DAY_OF_MONTH), 0,0,0);
-  startCal = startOfDay;
-  return startCal;
+   if(ctw.created_at.before(startCal)){
+     startCal = ctw.created_at;
+   }
+ }
+ Calendar startOfDay = Calendar.getInstance();
+ startOfDay.set(startCal.get(Calendar.YEAR), startCal.get(Calendar.MONTH), startCal.get(Calendar.DAY_OF_MONTH), 0,0,0);
+ startCal = startOfDay;
+ return startCal;
 }
 
 
@@ -147,6 +156,10 @@ void renderChart() {
   tw.update();
   tw.render();
 }
+stroke(255,255,255,100);
+noFill();
+rectMode(CORNERS);
+rect(plotX1, plotY1, plotX2, plotY2);
   // draw axis
   // draw data
   // draw titles
@@ -194,19 +207,18 @@ Calendar getCal(String ds){ // ds = dateString
 
 
 
-
 void keyPressed() {
   if (key == 'S') screenCap();
   if(key == 'm'){
     if(recording){
       recording = false;
-    }else{
-      recording = true;
+      }else{
+        recording = true;
+      }
     }
   }
-}
 
-void screenCap() {
+  void screenCap() {
   // save functionality in here
   String outputDir = "out/";
   String sketchName = "tweetExplorerTimeLayout-";
