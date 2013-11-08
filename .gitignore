@@ -1,5 +1,5 @@
 #################################
-# Java generated files 			#
+# Java generated files          #
 #################################
 *.class
 *.java
@@ -8,9 +8,8 @@
 *.war
 *.ear
 
-
 #################################
-# OS generated files 			#
+# OS generated files            #
 #################################
 .DS_Store
 .DS_Store?
@@ -20,8 +19,20 @@
 
 #################################
 # Processing files              #
-# some specific to my workflow  #
 #################################
 sketch.properties
+build-tmp/
+
+#################################
+# Some specific to my workflow  #
+#################################
 out/
-build-tmp/*
+srcFiles/
+web-export/
+data/
+# *.jpg
+# *.JPG
+*.tiff
+*.TIFF
+*.png
+*.PNG
