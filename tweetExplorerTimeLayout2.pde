@@ -1,4 +1,5 @@
-import processing.opengl.*;
+//import processing.opengl.*;
+import java.util.Calendar;
 
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
@@ -12,32 +13,43 @@ String[] accts;
 Calendar oldestTweetM; // this is the beginning of the day for the oldest (first) tweet 
 Calendar newestTweetM; // this is the end of the day for the newest (last) tweet
 
-boolean recording = true;
+boolean recording = false;
+String sampleTweetLength = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. @#. ";
+float maxTweetLen;
 
 float plotX1, plotX2, plotY1, plotY2; // defines area for chart
 float margin;
 
 void setup() {
-  background(0);
-  size(1920, 1080, P3D);
+  background(255);
+  // size(1920, 1080, P3D);
+  // size(10800, 6674, P3D); // print at 3ft wide, 300dpi -- too big for graphics card
+  //=150*10;
+  // size(3800, 2348, P3D);
   // size(1300, 700, OPENGL);
   //size(1200, 700, OPENGL);
-  // size(1200, 700, P3D);
+  size(1050, 700, P3D);
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
-  font = createFont("Helvetica", 24);  //requires a font file in the data folder
+  font = createFont("Helvetica", 13);  //does not require a font file in the data folder
   textFont(font);
+  textSize(13);
   // smooth(8);
   // noStroke();
-  margin = width*pow(PHI, 8);
+  margin = width*pow(PHI, 7);
+  println("margin: " + margin);
   plotX1 = margin;
   plotX2 = width-margin;
   plotY1 = margin;
   plotY2 = height-margin;
+  maxTweetLen = textWidth(sampleTweetLength)/4;
+  maxTweetLen = textWidth(sampleTweetLength);
+  // println(maxTweetLen);
 
   keywords = loadStrings("data/keywords.csv");
   accts =    loadStrings("data/accts.csv");
 
+  // loadTweets("tweetsLarge.csv");
   loadTweets("tweets.csv");
   // loadTweets("tweetsSmall.csv");
   // loadTweets("tweetsTiny.csv");
@@ -47,12 +59,14 @@ void setup() {
   oldestTweetM = startTweet(tweets);
   println("oldest Time: " + oldestTweetM.getTime());
 
-  final float secondsInADay = 1.0*24*60*60*1000;
+  final float milliSecondsPerDay = 1.0*24*60*60*1000;
+  final float minsPerDay = 1.0*24*60;
+  final float hrsPerDay = 1.0*24;
   for (Tweet ctw : tweets){
     // float crat = ctw.created_at.getTimeInMillis();
-    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), plotX1, plotX2);
-    float secOffset = ctw.created_at.getTimeInMillis() % secondsInADay;
-    ctw.targLoc.y = map(secOffset, 0.0, secondsInADay, plotY2,plotY1);
+    ctw.targLoc.x = map(ctw.created_at.getTimeInMillis(), newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), plotX1, plotX2-maxTweetLen);
+    float secOffset = ctw.created_at.getTimeInMillis() % milliSecondsPerDay;
+    ctw.targLoc.y = map(secOffset, 0.0, milliSecondsPerDay, plotY2,plotY1);
     // ctw.targLoc.y =  random(height);
     ctw.targLoc.z = 0;
 
@@ -67,7 +81,7 @@ void setup() {
 }
 
 void draw() {
- background(255);
+ background(0);
  renderChart();
 
  if(recording) screenCapMov();
@@ -84,8 +98,8 @@ void loadTweets(String _fn) {
     // tw.loc = new PVector(random(50,width-100), random(100, height-100), random(100, 1000));
     // tw.targLoc = new PVector(50+random(width-100), 50+random(height-100), 0);
     tw.sz = width * pow(PHI, 10);
-    // tw.clr = color(255, 255, 255,1);
-    tw.clr = color(0, 0, 0,2);
+    tw.clr = color(255, 255, 255,2); // white
+    // tw.clr = color(0, 0, 0,2); // black
 
     // tweet_id tweet_text  created_at  user_id screen_name name  profile_image_url
     tw.tweet_id =           int(pieces[0]);
