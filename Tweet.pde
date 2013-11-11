@@ -9,7 +9,6 @@ class Tweet {
   int tweet_id;
   String tweet_text;
   Calendar created_at;
-  // float timeInMillis; // starting out with this as a float to avoid problems with map()
   int timeInMillis;
   int user_id;
   String screen_name;
@@ -21,34 +20,24 @@ class Tweet {
   void update(){
     loc.x += (targLoc.x - loc.x) * PHI;
     loc.y += (targLoc.y - loc.y) * PHI;
-    loc.z += (targLoc.z - loc.z) * PHI;
+    // loc.z += (targLoc.z - loc.z) * PHI;
+  }
 
-    /*
-    if(dist(mouseX, mouseY, loc.x,loc.y) < 50){
-      //sz = 10;
-      targLoc.z = 50;
-    }else{
-      targLoc.z = 0;
-    }
-    */
-
-
-    }
-    void render(){
-      pushMatrix();
-      translate(loc.x, loc.y, loc.z);
+  void render(){
+    pushMatrix();
+      // translate(loc.x, loc.y, loc.z);
+      translate(loc.x, loc.y);
       fill(clr);
       noStroke();
-      //rect(0,0,sz*pow(1+PHI, 7),sz);
-      // ellipse(0, 0, sz, sz);
+      /*
       if(dist(mouseX, mouseY, loc.x, loc.y) < 2){
         fill(255,0,0,200);
+        println("red!");
       }else{
-      fill(clr);
-    }
-      
+        fill(clr);
+      }
+      */
       text(tweet_text, 0, 0);
-      popMatrix();
-
+    popMatrix();
     }
   }
