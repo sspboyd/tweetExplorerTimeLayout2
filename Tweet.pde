@@ -18,26 +18,33 @@ class Tweet {
   // ArrayList<Word> words;
 
   void update(){
-    loc.x += (targLoc.x - loc.x) * PHI;
-    loc.y += (targLoc.y - loc.y) * PHI;
+    // loc.x += (targLoc.x - loc.x) * PHI;
+    // loc.y += (targLoc.y - loc.y) * PHI;
     // loc.z += (targLoc.z - loc.z) * PHI;
   }
 
   void render(){
+    stroke(255, 1);
     pushMatrix();
       // translate(loc.x, loc.y, loc.z);
       translate(loc.x, loc.y);
       fill(clr);
-      noStroke();
-      /*
+      // noStroke();
+      
+      /* 
       if(dist(mouseX, mouseY, loc.x, loc.y) < 2){
-        fill(255,0,0,200);
-        println("red!");
+        textFont(fontTitle);
+        fill(255);
+        text(created_at.get(Calendar.HOUR_OF_DAY), -50, 0);
       }else{
         fill(clr);
       }
       */
+      textFont(font);
+      textSize(2);
       text(tweet_text, 0, 0);
+      // line(0,0,textWidth(tweet_text), 0);
+
     popMatrix();
     }
   }

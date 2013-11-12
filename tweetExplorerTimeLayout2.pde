@@ -7,7 +7,7 @@ final int mspd = 24 * 60 * 60 * 1000; // milliseconds per day, 86400000
 // final int minsPerDay = 24 * 60; // 1440 // not being used
 // final int hrsPerDay = 24; // not being used
 
-PFont font;
+PFont font, fontTitle;
 
 ArrayList<Tweet> tweets = new ArrayList();
 String[] keywords;
@@ -30,16 +30,19 @@ void setup() {
   rSn = 47; // 18, 29, 76
   randomSeed(rSn);
 
-  font = createFont("Helvetica", 3);  //does not require a font file in the data folder
+  font = createFont("Helvetica", 2);  //does not require a font file in the data folder
+  fontTitle = createFont("Helvetica", 48);  //does not require a font file in the data folder
+  // fontTitle = loadFont("HelveticaNeue-Light-48.vlw");  //does not require a font file in the data folder
+
   textFont(font);
-  textSize(3);
+  textSize(2);
 
   margin = width*pow(PHI, 7);
   println("margin: " + margin);
-  plotX1 = margin;
-  plotX2 = width-margin;
-  plotY1 = margin*2;
-  plotY2 = height-margin;
+  plotX1 = margin*(1+PHI);
+  plotX2 = width-margin*(1+PHI);
+  plotY1 = margin*2+margin*(1+PHI);
+  plotY2 = height-margin*(1+PHI);
 
   
 
@@ -59,10 +62,10 @@ void setup() {
 
   // Set the x, y, z locations for all the tweets.
   for (Tweet ctw : tweets){
-    float crat = ctw.created_at.getTimeInMillis(); // (convenience)
-    ctw.targLoc.x = map(crat, newestTweetM.getTimeInMillis(), oldestTweetM.getTimeInMillis(), plotX1, plotX2-maxTweetLen);
+    float crat = ctw.created_at.getTimeInMillis()-(1000*60*60*5); // (convenience)
+    ctw.targLoc.x = map(crat, oldestTweetM.getTimeInMillis(), newestTweetM.getTimeInMillis(), plotX1, plotX2-maxTweetLen);
     float secOffset = crat % float(mspd);
-    ctw.targLoc.y = map(secOffset, 0.0, float(mspd), plotY2, plotY1);
+    ctw.targLoc.y = map(secOffset, float(mspd), 0, plotY2, plotY1);
     // ctw.targLoc.z = 0;
 
     ctw.loc.x = ctw.targLoc.x;
@@ -71,18 +74,19 @@ void setup() {
   }
 
   // initWords();
-  noLoop();
+  // noLoop();
   println("setup done: " + nf(millis() / 1000.0, 1, 2));
 }
 
 void draw() {
  background(0);
  renderChart();
- println("render done: " + nf(millis() / 1000.0, 1, 2));
-
+ chrome();
+// println("render done: " + nf(millis() / 1000.0, 1, 2));
 
  if(recording) screenCapMov();
 }
+ 
 
 
 void loadTweets(String _fn) {
@@ -159,6 +163,7 @@ Calendar startTweet(ArrayList<Tweet> tw){
 
 
 void renderChart() {
+  textFont(font);
   for(Tweet tw : tweets){
     // tw.update();
     tw.render();
@@ -191,6 +196,21 @@ Calendar getCal(String ds){ // ds = dateString
   return cal;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//  UI / UTILITY FUNCTIONS
+///////////////////////////////////////////////////////////////////////////////
+
+void chrome(){
+  textFont(fontTitle);
+  textSize(48);
+  fill(150);
+  text("Three Weeks of \"CBC\" on Twitter", margin*2, margin*2);
+
+
+  noFill();
+  stroke(255,100);
+  rect(margin, margin, width-margin*2, height-margin*2);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //  UI / UTILITY FUNCTIONS
