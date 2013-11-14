@@ -24,7 +24,7 @@ class Tweet {
   }
 
   void render(){
-    stroke(255, 1);
+    stroke(255, 2);
     pushMatrix();
       // translate(loc.x, loc.y, loc.z);
       translate(loc.x, loc.y);
